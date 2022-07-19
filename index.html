@@ -10,24 +10,59 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <script type="text/babel">
-    const root = document.getElementById("root")
-
-    let counter = 0;
-
-    function countUp() {
-        counter = counter + 1;
-        render();
-    }
-
-    function render() {
-        ReactDOM.render(<Container />, root)
-    }
+    let root = document.getElementById("root");
 
     function Container() {
+        const [amount, setAmount] = React.useState(0);
+        const [flipped, setFlipped] = React.useState(false);
+
+        const onChange = (event) => {
+            setAmount(Number(event.target.value));
+        };
+
+        const reset = () => {
+            setAmount(0);
+        };
+
+        const onFlip = () => {
+            reset();
+            setFlipped((current) => !current);
+        }
+
         return (
             <div>
-                <h3>Total Clicks: {counter}</h3>
-                <button onClick={countUp}>Click Me!</button>
+                <h1 className="hi">Super Converter</h1>
+
+                <label htmlFor="minutes">Minutes</label>
+                <input
+                    id="minutes"
+                    placeholder="Minutes"
+                    type="number"
+                    value={flipped ? amount * 60 : amount}
+                    onChange={onChange}
+                    disabled={flipped}
+                />
+                <br />
+
+                <label htmlFor="hours">Hours</label>
+                <input
+                    id="hours"
+                    placeholder="Hours"
+                    type="number"
+                    value={flipped ? amount : Math.round(amount / 60)}
+                    onChange={onChange}
+                    disabled={!flipped}
+                />
+                <br />
+                <br />
+
+                <button onClick={reset}>
+                    Refresh
+                </button>
+
+                <button onClick={onFlip}>
+                    Flip
+                </button>
             </div>
         )
     }
