@@ -1,34 +1,44 @@
 import { useState, useEffect } from "react";
 
 function App() {
-    const [showing, setShowing] = useState(0);
+    const [toDo, setToDo] = useState("");
+    const [toDoList, setToDoList] = useState([]);
 
-    function onClick() {
-        setShowing((prev) => !prev);
-    }
+    function onChange(event) {
+        setToDo(event.target.value);
+    };
 
-    function Hello() {
-        useEffect(() => {
-            console.log("hi");
+    function onSubmit(event) {
+        event.preventDefault();
 
-            return () => {
-                console.log("bye")
-            }
-        }, []);
+        if (toDo === "") {
+            return;
+        }
 
-        return (
-            <h1>
-                Hello
-            </h1>
-        )
-    }
+        setToDoList((currentArray) => [...currentArray, toDo]);
+        setToDo("");
+    };
+
+
 
     return (
         <div>
-            {showing ? <Hello /> : null}
-            <button onClick={onClick}>
-                {showing ? "Hide" : "Show"}
-            </button>
+            <h1>My To Do List</h1>
+            {toDoList.length}
+
+            <form onSubmit={onSubmit}>
+                <input value={toDo} onChange={onChange} type="text" placeholder="Write your to do..." />
+
+                <button>
+                    Add
+                </button>
+            </form>
+
+            <hr />
+
+            {toDoList.map((item, index) => 
+                <li key={index}>{item}</li>
+            )}
         </div>
     );
 }
